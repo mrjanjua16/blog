@@ -10,7 +10,7 @@ export const signup = async (req, res, next) => {
         next(errorHandler(400, "All fields are required!"));
     }
 
-    const hashedPw = bcrypt.hashSync(password, 10);
+    const hashedPw = bcryptjs.hashSync(password, 10);
 
     const newUser = new User({
         username,
@@ -38,14 +38,14 @@ export const signin = async (req, res, next) => {
     try {
         const validUser = await User.findOne({ email });
         if (!validUser) {
-            return next(errorHandler(404, 'Invalid Credentials'));
+            return next(errorHandler(404, 'User not found'));
         }
         const validPw = bcryptjs.compareSync(password, validUser.password);
         const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
         const { password: pass , ...rest} = validUser._doc; 
         res
             .status(200)
-            .cookie('access token', token, {
+            .cookie('access_token', token, {
                 httpOnly: true,
             })
             .json(rest);
@@ -75,7 +75,7 @@ export const google = async (req, res, next) => {
                 username: name.toLowerCase().split(' ').join('') + Math.random().toString(36).slice(-4),
                 email,
                 password: hashedPw,
-                profilePicture: googlePhotoUrl, // Make sure to use googlePhotoUrl here
+                profilePicture: googlePhotoUrl,
             });
             await newUser.save();
             const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
