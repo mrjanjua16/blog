@@ -3,12 +3,13 @@ import { HiArrowSmRight, HiUser } from 'react-icons/hi';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { signOutFailure, signOutSuccess } from '../redux/user/userSlice.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function DashSidebar() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [tab, setTab] = useState('');
+  const { currentUser } = useSelector((state) => state.user);
   useEffect(()=>{
     const UrlParams = new URLSearchParams(location.search);
     const tabFromUrl = UrlParams.get("tab");
@@ -44,6 +45,13 @@ export default function DashSidebar() {
             Profile
           </Sidebar.Item>
           </Link>
+          {currentUser.isAdmin && (
+            <Link to='/create-post'>
+            <Sidebar.Item icon={HiArrowSmRight} labelColor='dark' as='div'>
+              Create Post
+            </Sidebar.Item>
+            </Link>  
+          )}
           <Sidebar.Item onClick={handleSignOut} icon={HiArrowSmRight} className="cursor-pointer">
             Sign Out
           </Sidebar.Item>
