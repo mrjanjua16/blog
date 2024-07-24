@@ -239,7 +239,7 @@ export default function DashProfile() {
           onChange={handleChange}
         />
         <Button type='submit' gradientDuoTone="purpleToBlue" outline disabled={loading || imageUploadProgress !== null}>
-          {loading || imageUploadProgress ? "Loading..." : "Update"}
+          {loading || imageUploadProgress ? <CircularProgressbar /> : "Update"}
         </Button>
       </form>
       <div className='text-red-500 flex justify-between mt-5'>

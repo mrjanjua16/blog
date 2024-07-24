@@ -9,7 +9,9 @@ import Header from './components/Header.jsx';
 import FooterCom from './components/FooterCom.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute.jsx';
-import CreatePost from './pages/CreatePost.jsx';
+import CreatePost from './components/CreatePost.jsx';
+import UpdatePost from './pages/UpdatePost.jsx';
+import PostPage from './pages/PostPage.jsx';
 
 
 export default function App() {
@@ -26,8 +28,10 @@ export default function App() {
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path='/Create-Post' element={<CreatePost />} />
+          <Route path='/Update-Post/:postId' element={<UpdatePost />} />
         </Route>
         <Route path='/Projects' element={<Projects />} />
+        <Route path='/Post/:postSlug' element={<PostPage />} />
       </Routes>
       <FooterCom />
     </BrowserRouter>
