@@ -13,6 +13,8 @@ export default function CommentSection({ postId }) {
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
   const navigate = useNavigate();
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (comment.length > 200) {
@@ -25,9 +27,9 @@ export default function CommentSection({ postId }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          content: comment,
-          postId,
-          userId: currentUser._id,
+          CONTENT: comment,
+          POST_ID: postId,
+          USER_ID: currentUser._id,
         }),
       });
       const data = await res.json();
@@ -44,7 +46,7 @@ export default function CommentSection({ postId }) {
   useEffect(() => {
     const getComments = async () => {
       try {
-        const res = await fetch(`/api/comment/getPostComments/${postId}`);
+        const res = await fetch(`/api/comment/get-post-comments/${postId}`);
         if (res.ok) {
           const data = await res.json();
           setComments(data);
@@ -62,7 +64,7 @@ export default function CommentSection({ postId }) {
         navigate('/sign-in');
         return;
       }
-      const res = await fetch(`/api/comment/likeComment/${commentId}`, {
+      const res = await fetch(`/api/comment/like-comment/${commentId}`, {
         method: 'PUT',
       });
       if (res.ok) {
@@ -72,8 +74,8 @@ export default function CommentSection({ postId }) {
             comment._id === commentId
               ? {
                   ...comment,
-                  likes: data.likes,
-                  numberOfLikes: data.likes.length,
+                  LIKES: data.LIKES,
+                  NUM_LIKES: data.LIKES.length,
                 }
               : comment
           )
@@ -87,7 +89,7 @@ export default function CommentSection({ postId }) {
   const handleEdit = async (comment, editedContent) => {
     setComments(
       comments.map((c) =>
-        c._id === comment._id ? { ...c, content: editedContent } : c
+        c._id === comment._id ? { ...c, CONTENT: editedContent } : c
       )
     );
   };
@@ -99,7 +101,7 @@ export default function CommentSection({ postId }) {
         navigate('/sign-in');
         return;
       }
-      const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+      const res = await fetch(`/api/comment/delete-comment/${commentId}`, {
         method: 'DELETE',
       });
       if (res.ok) {

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { signOutFailure, signOutSuccess } from '../redux/user/userSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { FcBusinessman, FcEditImage, FcNext } from "react-icons/fc";
+import { FcBusinessman, FcEditImage, FcSportsMode, FcDocument, FcCollaboration, FcComments } from "react-icons/fc";
 
 export default function DashSidebar() {
   const dispatch = useDispatch();
@@ -54,19 +54,26 @@ export default function DashSidebar() {
           )}
           {currentUser.isAdmin && (
             <Link to='/dashboard?tab=posts'>
-              <Sidebar.Item active={tab === 'posts'} icon={FcNext} labelColor='dark' as='div'>
+              <Sidebar.Item active={tab === 'posts'} icon={FcDocument} labelColor='dark' as='div'>
                 Posts
               </Sidebar.Item>
             </Link>
           )}
           {currentUser.isAdmin && (
             <Link to='/dashboard?tab=users'>
-              <Sidebar.Item active={tab === 'users'} icon={FcNext} labelColor='dark' as='div'>
+              <Sidebar.Item active={tab === 'users'} icon={FcCollaboration} labelColor='dark' as='div'>
                 Users
               </Sidebar.Item>
             </Link>
           )}
-          <Sidebar.Item onClick={handleSignOut} icon={FcNext} className="cursor-pointer">
+          {currentUser.isAdmin && (
+            <Link to='/dashboard?tab=comments'>
+              <Sidebar.Item active={tab === 'comments'} icon={FcComments} labelColor='dark' as='div'>
+                Comments
+              </Sidebar.Item>
+            </Link>
+          )}
+          <Sidebar.Item onClick={handleSignOut} icon={FcSportsMode} className="cursor-pointer">
             Sign Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>

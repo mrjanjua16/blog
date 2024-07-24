@@ -2,6 +2,8 @@ import { Link, useParams } from 'react-router-dom';
 import { Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import CallToAction from '../components/CallToAction.jsx';
+import CommentsSection from '../components/CommentsSection.jsx';
+import PostCard from '../components/PostCard.jsx';
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -95,11 +97,16 @@ export default function PostPage() {
       <div className='max-w-4xl mx-auto w-full'>
         <CallToAction category={post && post.CATEGORY} />
       </div>
-      <div className='max-w-4xl mx-auto w-full'>Comment Section</div>
-      <div className='flex flex-col justify-center items.center mb-5'>
-        <h1 className='text-2xl font-serif'>Recent Articles</h1>
-        <div className='flex flex-col justify-center items.center mb-5'>
-          Recent Posts
+      <CommentsSection postId={post._id} />
+
+      <div className='flex flex-col justify-center items-center mb-5'>
+        <h1 className='text-xl mt-5'>Recent articles</h1>
+        <div className='flex flex-wrap gap-5 mt-5 justify-center'>
+          {recentPosts && 
+            recentPosts.map((post) => (
+              <PostCard key={post._id} post={post} />
+            ))
+          }
         </div>
       </div>
     </main>

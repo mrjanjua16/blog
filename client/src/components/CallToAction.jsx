@@ -1,31 +1,31 @@
 import { Button } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 
-export default function CallToAction({category}) {
+export default function CallToAction({ category }) {
 
     const [categoryMapping, setCategoryMapping] = useState([]);
 
     useEffect(
         () => {
-        const fetchCategory = async () => {
-            try {
-                const res = await fetch('/api/post/get-category');
-                const data = await res.json();
-                const categoryMap = data.reduce((acc, curr) => {
-                    acc[curr.NAME] = curr;
-                    return acc;
-                }, {});
-                if(!res.ok) {
-                    console.log(data.message);
-                }else {
-                    setCategoryMapping(categoryMap);
+            const fetchCategory = async () => {
+                try {
+                    const res = await fetch('/api/post/get-category');
+                    const data = await res.json();
+                    const categoryMap = data.reduce((acc, curr) => {
+                        acc[curr.NAME] = curr;
+                        return acc;
+                    }, {});
+                    if (!res.ok) {
+                        console.log(data.message);
+                    } else {
+                        setCategoryMapping(categoryMap);
+                    }
+                } catch (error) {
+                    console.log(error);
                 }
-            } catch (error) {
-                console.log(error);
             }
-        }
-        fetchCategory();
-    }, []);
+            fetchCategory();
+        }, []);
 
     const { URL, TEXT, IMAGE } = categoryMapping[category] || {};
 
