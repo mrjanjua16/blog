@@ -80,8 +80,8 @@ export default function DashComments() {
               <Table.HeadCell>Date updated</Table.HeadCell>
               <Table.HeadCell>Comment content</Table.HeadCell>
               <Table.HeadCell>Number of likes</Table.HeadCell>
-              <Table.HeadCell>PostId</Table.HeadCell>
-              <Table.HeadCell>UserId</Table.HeadCell>
+              <Table.HeadCell>Post</Table.HeadCell>
+              <Table.HeadCell>User</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
             </Table.Head>
             {comments.map((comment) => (
@@ -92,8 +92,8 @@ export default function DashComments() {
                   </Table.Cell>
                   <Table.Cell>{comment.CONTENT}</Table.Cell>
                   <Table.Cell>{comment.NUM_LIKES}</Table.Cell>
-                  <Table.Cell>{comment.POST_ID}</Table.Cell>
-                  <Table.Cell>{comment.USER_ID}</Table.Cell>
+                  <Table.Cell>{comment.POST_ID.TITLE}</Table.Cell>
+                  <Table.Cell>{comment.USER_ID.email}</Table.Cell>
                   <Table.Cell>
                     <span
                       onClick={() => {

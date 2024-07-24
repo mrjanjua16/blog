@@ -15,10 +15,7 @@ const commentSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    LIKES: {
-        type: Array,
-        default: [],
-    },
+    LIKES: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     NUM_LIKES: {
         type: Number,
         default: 0
