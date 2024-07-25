@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { signOutFailure, signOutSuccess } from '../redux/user/userSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { FcBusinessman, FcEditImage, FcSportsMode, FcDocument, FcCollaboration, FcComments } from "react-icons/fc";
+import { FcBusinessman, FcEditImage, FcSportsMode, FcDocument, FcConferenceCall, FcComments, FcBarChart } from "react-icons/fc";
 
 export default function DashSidebar() {
   const dispatch = useDispatch();
@@ -46,12 +46,20 @@ export default function DashSidebar() {
           </Sidebar.Item>
           </Link>
           {currentUser.isAdmin && (
+            <Link to='/dashboard?tab=analytics'>
+              <Sidebar.Item active={tab === 'analytics'} icon={FcBarChart} labelColor='dark' as='div'>
+                Analytics
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser.isAdmin && (
             <Link to='/dashboard?tab=create-post'>
             <Sidebar.Item active={tab === 'create-post'} icon={FcEditImage} labelColor='dark' as='div'>
               Create Post
             </Sidebar.Item>
             </Link>  
           )}
+
           {currentUser.isAdmin && (
             <Link to='/dashboard?tab=posts'>
               <Sidebar.Item active={tab === 'posts'} icon={FcDocument} labelColor='dark' as='div'>
@@ -61,7 +69,7 @@ export default function DashSidebar() {
           )}
           {currentUser.isAdmin && (
             <Link to='/dashboard?tab=users'>
-              <Sidebar.Item active={tab === 'users'} icon={FcCollaboration} labelColor='dark' as='div'>
+              <Sidebar.Item active={tab === 'users'} icon={FcConferenceCall} labelColor='dark' as='div'>
                 Users
               </Sidebar.Item>
             </Link>
@@ -73,6 +81,7 @@ export default function DashSidebar() {
               </Sidebar.Item>
             </Link>
           )}
+          
           <Sidebar.Item onClick={handleSignOut} icon={FcSportsMode} className="cursor-pointer">
             Sign Out
           </Sidebar.Item>

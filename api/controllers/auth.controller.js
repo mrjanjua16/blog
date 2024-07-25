@@ -88,3 +88,35 @@ export const google = async (req, res, next) => {
         next(error);
     }
 };
+
+export const setAdmin = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const user = await User.findById(id);
+        if (user.isAdmin) {
+            return next(errorHandler(400, 'User is already an admin!'));
+        }
+        await User.findByIdAndUpdate(id, { isAdmin: true });
+        res.status(200).json('Admin created successfully!');
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const unSetAdmin = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        if (req.user.id === id) {
+            return next(errorHandler(400, 'You cannot remove yourself as admin!'));
+        }
+
+        const user = await User.findById(id);
+        if (!user.isAdmin) {
+            return next(errorHandler(400, 'User is not an admin!'));
+        }
+        await User.findByIdAndUpdate(id, { isAdmin: false });
+        res.status(200).json('Admin removed successfully!');
+    } catch (error) {
+        next(error);
+    }
+};

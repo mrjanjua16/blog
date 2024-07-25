@@ -59,7 +59,7 @@ export const getPosts = async (req, res, next) => {
         
         const query = {
             ...(req.query.USERID && { AUTHOR: req.query.USERID }),
-            ...(req.query.CATEGORY && { CATEGORY: req.query.CATEGORY }),
+            ...(req.query.category && { CATEGORY: req.query.category }),
             ...(req.query.TITLE && { TITLE: req.query.TITLE }),
             ...(req.query.CONTENT && { CONTENT: req.query.CONTENT }),
             ...(req.query.postId && { _id: req.query.postId }),
@@ -71,13 +71,12 @@ export const getPosts = async (req, res, next) => {
             }),
         };
 
-        // If slug is present, limit the query to that specific post
         if (req.query.slug) {
             query.SLUG = req.query.slug;
         }
         
         const posts = await Post.find(query)
-            .populate('AUTHOR', 'email')  // Adjust fields as needed
+            .populate('AUTHOR', 'email')  
             .sort({ updatedAt: sortDirection })
             .skip(startIndex)
             .limit(limit);
