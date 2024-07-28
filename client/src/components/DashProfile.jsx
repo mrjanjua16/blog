@@ -21,6 +21,7 @@ export default function DashProfile() {
   const [deleteUserSuccess, setDeleteUserSuccess] = useState(null);
   const [deleteUserError, setDeleteUserError] = useState(null);
   const [formData, setFormData] = useState({});
+  const [isDirty, setIsDirty] = useState(false);
   const dispatch = useDispatch();
 
   const filePickerRef = useRef();
@@ -30,6 +31,7 @@ export default function DashProfile() {
     if (file) {
       setImageFile(file);
       setImageFileUrl(URL.createObjectURL(file));
+      setIsDirty(true);
     }
   };
 
@@ -63,6 +65,7 @@ export default function DashProfile() {
             setImageFileUrl(downloadUrl);
             setFormData({ ...formData, profilePicture: downloadUrl });
             setImageUploadProgress(null);
+
           }
         )
       }
@@ -71,6 +74,7 @@ export default function DashProfile() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    setIsDirty(true); 
   }
 
   const handleSubmit = async (e) => {
@@ -101,6 +105,7 @@ export default function DashProfile() {
         dispatch(updateSuccess(data));
         setUpdateUserError(null);
         setShowError(false);
+        setIsDirty(false);
 
         let updateMessage = "Updated: ";
         const updates = [];
@@ -110,10 +115,10 @@ export default function DashProfile() {
         if (formData.email && formData.email !== currentUser.email) {
           updates.push("email");
         }
-        if (formData.password) {
+        if (formData.password && formData.password !== currentUser.password) {
           updates.push("password");
         }
-        if (formData.profilePicture) {
+        if (formData.profilePicture && formData.profilePicture !== currentUser.profilePicture) {
           updates.push("profile picture");
         }
         updateMessage += updates.join(", ");
@@ -163,7 +168,7 @@ export default function DashProfile() {
         dispatch(signOutSuccess());
       }
     } catch (error) {
-      dispatch(signOutFailure(error.message));
+      dispatch(signOutFailure(error.message || "Sign out failed"));
     }
   }
 
@@ -238,8 +243,8 @@ export default function DashProfile() {
           placeholder='password'
           onChange={handleChange}
         />
-        <Button type='submit' gradientDuoTone="purpleToBlue" outline disabled={loading || imageUploadProgress !== null}>
-          {loading || imageUploadProgress ? <CircularProgressbar /> : "Update"}
+        <Button type='submit' gradientDuoTone="purpleToBlue" outline disabled={!isDirty || loading || imageUploadProgress !== null}>
+          {loading ? "Loading..." : "Update"}
         </Button>
       </form>
       <div className='text-red-500 flex justify-between mt-5'>

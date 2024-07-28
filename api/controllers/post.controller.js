@@ -55,11 +55,11 @@ export const getPosts = async (req, res, next) => {
     try {
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 10;
-        const sortDirection = req.query.order === 'asc' ? 1 : -1;
+        const sortDirection = req.query.sort === 'asc' ? 1 : -1;
         
         const query = {
             ...(req.query.USERID && { AUTHOR: req.query.USERID }),
-            ...(req.query.category && { CATEGORY: req.query.category }),
+            ...(req.query.category && { CATEGORY: req.query.category}),
             ...(req.query.TITLE && { TITLE: req.query.TITLE }),
             ...(req.query.CONTENT && { CONTENT: req.query.CONTENT }),
             ...(req.query.postId && { _id: req.query.postId }),
@@ -74,13 +74,14 @@ export const getPosts = async (req, res, next) => {
         if (req.query.slug) {
             query.SLUG = req.query.slug;
         }
-        
+
         const posts = await Post.find(query)
             .populate('AUTHOR', 'email')  
             .sort({ updatedAt: sortDirection })
             .skip(startIndex)
             .limit(limit);
 
+    
         const totalPosts = await Post.countDocuments(query);
 
         const now = new Date();

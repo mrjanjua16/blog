@@ -26,7 +26,7 @@ export default function UpdatePost() {
     });
     const [publishError, setPublishError] = useState(null);
     const { postId } = useParams();
-
+    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
 
@@ -103,11 +103,28 @@ export default function UpdatePost() {
                 return;
             }
             setPublishError(null);
-            navigate(`/post/${data.slug}`);
+            navigate(`/post/${data.SLUG}`);
         } catch (error) {
             setPublishError(error);
         }
     };
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch('/api/post/get-category');
+                const data = await res.json();
+                if (!res.ok) {
+                    console.log(data.message);
+                } else {
+                    setCategories(data.map((category) => category.NAME));
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     return (
         <div className='p-3 max-w-3xl mx-auto min-h-screen'>
@@ -125,12 +142,13 @@ export default function UpdatePost() {
                     />
                     <Select
                         onChange={(e) => setFormData({ ...formData, CATEGORY: e.target.value })}
-                        value={formData.CATEGORY || 'uncategorized'}
+                        value={formData.CATEGORY || 'Development'}
                     >
-                        <option value='uncategorized'>Select a category</option>
-                        <option value='development'>Development</option>
-                        <option value='investing'>Investing</option>
-                        <option value='blockchain'>Blockchain</option>
+                        {categories.map((category) => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
                     </Select>
                 </div>
                 <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>

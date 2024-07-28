@@ -10,7 +10,7 @@ import {
 import { CircularProgressbar } from 'react-circular-progressbar'; 
 import 'react-circular-progressbar/dist/styles.css';
 import { app } from '../firebase';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -20,9 +20,9 @@ export default function CreatePost() {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
-  // Get user email from Redux state
   const userEmail = useSelector((state) => state.user.email);
 
   const handleUploadImage = async () => {
@@ -65,6 +65,10 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (file && !formData.IMAGE) {
+      setImageUploadError('Please upload the selected image before publishing.');
+      return;
+    }
     try {
       const postData = { ...formData, AUTHOR: userEmail };
       const res = await fetch('/api/post/create-post', {
@@ -80,13 +84,30 @@ export default function CreatePost() {
 
       if(res.ok) {
         setPublishError(null);
-        navigate(`/post/${data._id}`);
+        navigate(`/post/${data.SLUG}`);
       }
     } catch (error) {
       setPublishError('Something went wrong');
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+        try {
+            const res = await fetch('/api/post/get-category');
+            const data = await res.json();
+            if (!res.ok) {
+                console.log(data.message);
+            } else {
+                setCategories(data.map((category) => category.NAME));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    fetchCategories();
+}, []);
   
   return (
     <div className="max-w-5xl mx-auto p-1 w-full">
@@ -104,12 +125,14 @@ export default function CreatePost() {
           <Select
            onChange={(e) => setFormData({ ...formData, CATEGORY: e.target.value })}
           >
-            <option value="Uncategorized">Select a category</option>
-            <option value="Development">Development</option>
-            <option value="Investing">Investing</option>
-            <option value="Blockchain">Blockchain</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </Select>
         </div>
+        
         <div className="flex gap-4 items-center justify-between border-4 border-teal-300 border-dotted p-3">
           <FileInput
             type="file"
@@ -137,6 +160,9 @@ export default function CreatePost() {
           </Button>
         </div>
         {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
+        {file && !formData.IMAGE && (
+          <Alert color='warning'>Please click on "Upload Image" before publishing.</Alert>
+        )}
         {formData.IMAGE && (
           <img
            src={formData.IMAGE} 
@@ -144,6 +170,7 @@ export default function CreatePost() {
            className="w-full h-72 object-cover"
            />
         )}
+
         <ReactQuill
          theme="snow" 
          placeholder="Write your post here..." 

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { act } from "react";
 
 const initialState = {
     currentUser: null,
@@ -62,6 +61,18 @@ const userSlice = createSlice({
     },
 });
 
-export const { signInStart, signInSuccess, signInFailure, updateStart, updateSuccess, updateFailure, deleteStart, deleteSuccess, deleteFailure, signOutSuccess, signOutFailure } = userSlice.actions;
+export const {
+     signInStart,
+     signInSuccess,
+     signInFailure,
+     updateStart,
+     updateSuccess,
+     updateFailure,
+     deleteStart,
+     deleteSuccess,
+     deleteFailure,
+     signOutSuccess,
+     signOutFailure
+} = userSlice.actions;
 
 export default userSlice.reducer;

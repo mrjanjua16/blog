@@ -171,11 +171,11 @@ export default function Posts() {
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <HiOutlineExclamationCircle className="text-red-500 w-16 h-16" />
-            <h3 className="text-lg font-medium text-gray-900">
-              Are you sure you want to delete this post?
+          <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
+              Are you sure you want to delete this user?
             </h3>
-            <div className="">
+            <div className='flex justify-center gap-4'>
               <Button color="failure" onClick={handleDeletePost}>
                 Yes, I'm sure
               </Button>

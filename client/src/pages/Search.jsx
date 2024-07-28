@@ -7,7 +7,7 @@ export default function Search() {
     const [sidebarData, setSidebarData] = useState({
         searchTerm: '',
         sort: 'desc',
-        category: 'uncategorized'
+        category: 'Development'
     });
 
     const [posts, setPosts] = useState([]);
@@ -24,11 +24,14 @@ export default function Search() {
         const sortFromUrl = urlParams.get('sort');
         const categoryFromUrl = urlParams.get('category');
 
-        setSidebarData({
-            searchTerm: searchTermFromUrl || '',
-            sort: sortFromUrl || 'desc',
-            CATEGORY: categoryFromUrl || 'uncategorized'
-        });
+        if (searchTermFromUrl || sortFromUrl || categoryFromUrl) {
+            setSidebarData({
+                ...sidebarData,
+                searchTerm: searchTermFromUrl || '',
+                sort: sortFromUrl || 'desc',
+                category: categoryFromUrl || 'Development'
+            });
+        }
 
         const fetchPosts = async () => {
             setLoading(true);
@@ -39,8 +42,11 @@ export default function Search() {
                 const data = await response.json();
                 setPosts(data.posts);
                 setLoading(false);
-
-                setShowMore(data.posts.length === 10);
+                if (data.posts.length === 10) {
+                    setShowMore(true);
+                } else {
+                    setShowMore(false);
+                }
             } else {
                 console.error('Failed to fetch posts');
                 setLoading(false);
@@ -127,7 +133,7 @@ export default function Search() {
                     <div className='flex items-center gap-2'>
                         <label className='font-semibold'>Category:</label>
                         <Select onChange={handleChange} value={sidebarData.category} id='category'>
-                            <option value='uncategorized'>Uncategorized</option>
+
                             {categories.map((category) => (
                                 <option key={category} value={category}>
                                     {category}
