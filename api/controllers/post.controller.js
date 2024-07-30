@@ -3,12 +3,13 @@ import User from '../models/user.model.js';
 import { errorHandler } from '../utils/error.js';
 
 export const createPost = async (req, res, next) => {
-    if (!req.user.isAdmin) {
+/*    if (!req.user.isAdmin) {
         return res.status(401).json({
             success: false,
             message: "You are not authorized to create a post"
         });
     }
+*/
     if (!req.body.CONTENT || !req.body.TITLE) {
         return res.status(400).json({
             success: false,
