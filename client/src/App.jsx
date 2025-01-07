@@ -1,3 +1,7 @@
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
@@ -16,7 +20,9 @@ import ScrollToTop from './components/ScrolToTop.jsx';
 import Search from './pages/Search.jsx';
 
 export default function App() {
+  const queryClient = new QueryClient()
   return (
+    <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <ScrollToTop />
       <Header />
@@ -40,5 +46,6 @@ export default function App() {
       </div>
       <FooterCom />
     </BrowserRouter>
+    </QueryClientProvider>
   )
-};
+}
